@@ -856,7 +856,7 @@
             $li.addClass(classes);
 
             if (this.options.enableHTML) {
-                $label.html(" " + label);
+                $label.html("<span> " + label + "</span>");
             }
             else {
                 $label.text(" " + label);
@@ -1023,6 +1023,9 @@
                             this.$filter.find('.multiselect-search').val('');
                             $('li', this.$ul).show().removeClass('multiselect-filter-hidden');
 
+                            var removeHighlight = this.removeHighlight;
+                            $('li label>span', this.$ul).each(function (index, item) { removeHighlight($(item)) });
+
                             this.updateSelectAll();
 
                             if (this.options.enableClickableOptGroups && this.options.multiple) {
@@ -1111,6 +1114,13 @@
                                                     .removeClass('multiselect-filter-hidden');
                                             }
                                         }
+
+                                        // Highlight search text
+                                        if (this.options.highlightSearchText && this.options.filterBehavior !== 'value' && !$(element).hasClass('multiselect-filter-hidden')) {
+                                            var $span = $(element).find('span');
+                                            this.removeHighlight($span);
+                                            this.highlightText($span, this.query);
+                                        }
                                     }
                                 }, this));
                             }
@@ -1127,6 +1137,30 @@
                     }, this));
                 }
             }
+        },
+
+        removeHighlight: function($item) {
+            $item.html($item.html().replace(/<mark>/i, '').replace(/<\/\s*mark>/i, ''));
+        },
+
+        highlightText: function($item, searchText) {
+            var regexp = null;
+            var regexpText = '(' + searchText.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ')';
+
+            if (this.options.enableFullValueFiltering) {
+                regexpText = '^' + regexpText;
+            }
+
+            if (this.options.enableCaseInsensitiveFiltering) {
+                regexp = new RegExp(regexpText, 'i');
+            }
+            else {
+                regexp = new RegExp(regexpText);
+            }
+
+            var highlightedText = $item.text().replace(regexp, function (wholeMatch, matchedText) { return '<mark>' + matchedText + '</mark>' });
+            var highlightedHtml = $item.html().replace($item.text(), highlightedText);
+            $item.html($item.html().replace($item.text(), highlightedText));
         },
 
         /**
