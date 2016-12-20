@@ -855,6 +855,10 @@
             $label.addClass(inputType);
             $li.addClass(classes);
 
+            if (this.options.showListItemTextOnly) {
+                $label.addClass('no-visible-control');
+            }
+
             if (this.options.enableHTML) {
                 $label.html("<span> " + label + "</span>");
             }
