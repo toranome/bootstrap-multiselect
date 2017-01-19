@@ -1,5 +1,7 @@
 # Fork of Bootstrap Multiselect
 
+[![Build Status](https://travis-ci.org/toranome/bootstrap-multiselect.svg?branch=master)](https://travis-ci.org/toranome/bootstrap-multiselect)
+
 This is just a fork of David Stutz's [http://davidstutz.github.io/bootstrap-multiselect/](Bootstrap-Multiselect), with a few of my own experiments.
 
 ## Original License
