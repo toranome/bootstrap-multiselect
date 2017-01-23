@@ -250,7 +250,10 @@
                         && $('option', $(select)).length !== 1
                         && this.multiple) {
 
-                    if (this.selectAllNumber) {
+                    if (typeof(this.allSelectedText == 'function')) {
+                        return this.allSelectedText(options.length);
+                    }
+                    else if (this.selectAllNumber) {
                         return this.allSelectedText + ' (' + options.length + ')';
                     }
                     else {
